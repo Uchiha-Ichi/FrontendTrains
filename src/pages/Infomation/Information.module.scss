@@ -1,0 +1,30 @@
+.gridContent {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Creates 6 equal columns */
+  gap: 1px; /* Optional: adds space between cells */
+  margin: 20px; /* Adds margin around the grid */
+}
+
+.gridHeader {
+  background-color: #007bff; /* Header background color */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc; /* Border at the bottom of each header */
+}
+
+.gridCell {
+  text-align: center;
+  padding: 10px;
+  border-top: 1px solid #ccc; /* Border on top for each cell */
+  border-left: 1px solid #ccc; /* Border on the left for each cell */
+}
+
+.gridCell:nth-child(6n) {
+  border-right: 1px solid #ccc; /* Border on the right of every 6th cell */
+}
+
+.gridHeader:nth-child(6n) {
+  border-right: 1px solid #ccc; /* Border on the right of the header cells */
+}

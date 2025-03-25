@@ -1,0 +1,20 @@
+// fonts
+$font-path: "../../assets/fonts/";
+
+$normal-font: "#{$font-path}CartographCF-DemiBold.otf";
+// $normal-font: "CartographCF-DemiBold";
+$title-font: "#{$font-path}CartographCF-DemiBoldItalic.otf";
+
+@font-face {
+  font-family: "NormalFont";
+  src: url(#{$normal-font}) format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TitleFont";
+  src: url(#{$title-font}) format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}

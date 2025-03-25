@@ -1,0 +1,13 @@
+@use "../../assets/styles/utils" as *;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "NormalFont", sans-serif;
+  // color: map-get($primary-color, "1");
+}
+.main {
+  width: 80vw;
+  margin: 0 auto;
+  margin-top: 2rem;
+}
