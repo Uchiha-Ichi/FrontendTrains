@@ -1,0 +1,34 @@
+{
+  "primaryColor": {
+    "1": "#f18eb0",
+    "2": "#bb778f65",
+    "3": "#88445cbb"
+  },
+  "secondaryColor": {
+    "1": "#e4b78166",
+    "2": "#ffc180",
+    "3": "#e69533"
+  },
+  "tertiaryColor": {
+    "1": "#8ce99a",
+    "2": "#49e9a6",
+    "3": "#40bf6a11"
+  },
+  "accentColor": {
+    "1": "#0f6e7bee",
+    "2": "#00aacc",
+    "3": "#40d4e7"
+  },
+  "errorColor": {
+    "1": "#c87258",
+    "2": "#e34e1c",
+    "3": "#501502ee"
+  },
+  "lightColor": "#ddd5d7",
+  "darkColor": "#1f191b",
+  "greyColor": {
+    "1": "#322a2d",
+    "2": "#f18eb013",
+    "3": "#cbbec2"
+  }
+}

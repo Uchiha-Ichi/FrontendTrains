@@ -1,0 +1,15 @@
+@use "../../assets/styles/utils" as *;
+
+.button {
+  // background-color: map-get($accent-color, "2");
+  // color: $light-color;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.button:hover {
+  background-color: map-get($accent-color, "1");
+}
