@@ -1,6 +1,6 @@
 import styles from "./Input.module.scss";
 import { useTheme } from "../../config/ThemeContext";
-export default function Input({ label, id }) {
+export default function Input({ label, id, value, onChange }) {
   const { currentTheme } = useTheme();
   const { accentColor, greyColor } = currentTheme;
   return (
@@ -15,6 +15,8 @@ export default function Input({ label, id }) {
         }}
         id={id}
         className={styles.input}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
