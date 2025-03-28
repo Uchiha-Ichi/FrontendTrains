@@ -10,8 +10,8 @@ export default function Home() {
     <div className={styles.main}>
       <Calendar />
       <div className={styles.mainRight}>
-        <Input label={"Ga đi?"} id={"from"} />
-        <Input label={"Ga đến?"} id={"to"} />
+        <Input colorScheme={"primary"} label={"Ga đi?"} id={"from"} />
+        <Input colorScheme={"primary"} label={"Ga đến?"} id={"to"} />
         <Button>Tìm kiếm</Button>
       </div>
     </div>

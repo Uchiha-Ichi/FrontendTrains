@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import Infomation from "./pages/Infomation/Infomation";
 import PaymentSuccess from "./pages/paymentSuccess/PaymentSuccess";
+import Booking from "./pages/Booking/Booking";
 function App() {
   return (
     <ThemeProvider>
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path="booking/" element={<Booking />} />
             <Route path="info/" element={<Infomation />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
           </Route>

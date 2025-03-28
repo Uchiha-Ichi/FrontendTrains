@@ -7,7 +7,7 @@ export default function Navigation() {
     <div className={styles.lineContainer}>
       <div className={styles.line}></div>
       <div className={styles.circles}>
-        <Link to="/tickets" className={styles.circle}></Link>
+        <Link to="/booking" className={styles.circle}></Link>
         <Link to="/info" className={styles.circle}></Link>
         <Link to="/confirm" className={styles.circle}></Link>
         <Link to="/checkout" className={styles.circle}></Link>
