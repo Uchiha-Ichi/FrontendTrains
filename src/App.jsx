@@ -6,6 +6,7 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import Infomation from "./pages/Infomation/Infomation";
 import PaymentSuccess from "./pages/paymentSuccess/PaymentSuccess";
 import Booking from "./pages/Booking/Booking";
+import CheckTicket from "./pages/CheckTicket/CheckTicket";
 function App() {
   return (
     <ThemeProvider>
@@ -16,6 +17,7 @@ function App() {
             <Route path="booking/" element={<Booking />} />
             <Route path="info/" element={<Infomation />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="check-ticket/" element={<CheckTicket />} />
           </Route>
         </Routes>
       </Router>
