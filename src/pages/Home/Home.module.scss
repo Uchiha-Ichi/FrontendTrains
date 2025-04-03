@@ -1,16 +1,215 @@
-@use "../../assets/styles/utils" as *;
+// @use "../../assets/styles/utils" as *;
+// .main {
+//   display: flex;
+//   padding-top: 10%;
+//   gap: 5%;
+//   h2 {
+//     font-size: 2rem;
+//   }
+//   .mainRight {
+//     padding-top: 80px;
+//     display: flex;
+//     gap: 20px;
+//     flex-direction: column;
+//     align-items: flex-end;
+//   }
+// }
+
 .main {
   display: flex;
-  padding-top: 10%;
-  gap: 5%;
-  h2 {
-    font-size: 2rem;
-  }
-  .mainRight {
-    padding-top: 80px;
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #2a2a2a; // Nền tối như trong hình
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  gap: 20px;
+}
+
+.calendarWrapper {
+  flex: 1;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dateLabel {
+  color: #ff69b4; // Màu hồng cho nhãn ngày
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.mainRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000; // Đảm bảo z-index cao để không bị che
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: block; // Đảm bảo danh sách không bị ẩn
+}
+
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: #007bff; // Nền xanh khi hover
+    color: #fff;
   }
 }
+
+.loading {
+  color: #007bff;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.results {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
+  color: #fff;
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    background-color: #fff;
+    color: #000;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.error {
+  color: #ff0000;
+}
+
+// .main {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 20px;
+//   background-color: #2a2a2a; // Nền tối như trong hình thứ ba
+//   min-height: 100vh;
+// }
+
+// .container {
+//   display: flex;
+//   justify-content: space-between;
+//   width: 100%;
+//   max-width: 800px;
+//   gap: 20px;
+// }
+
+// .calendarWrapper {
+//   flex: 1;
+//   background-color: #fff;
+//   padding: 15px;
+//   border-radius: 8px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// }
+
+// .dateLabel {
+//   color: #ff69b4; // Màu hồng cho nhãn ngày như trong hình thứ ba
+//   font-weight: bold;
+//   margin-bottom: 10px;
+// }
+
+// .mainRight {
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 15px;
+// }
+
+// .inputWrapper {
+//   position: relative;
+// }
+
+// .suggestions {
+//   position: absolute;
+//   top: 100%;
+//   left: 0;
+//   right: 0;
+//   background-color: #fff;
+//   border: 1px solid #ccc;
+//   border-radius: 4px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//   max-height: 200px;
+//   overflow-y: auto;
+//   z-index: 10;
+//   list-style: none;
+//   padding: 0;
+//   margin: 0;
+// }
+
+// .suggestionItem {
+//   padding: 10px;
+//   cursor: pointer;
+//   &:hover {
+//     background-color: #007bff; // Nền xanh khi hover như trong hình đầu tiên
+//     color: #fff;
+//   }
+// }
+
+// .loading {
+//   color: #007bff;
+//   font-size: 14px;
+//   margin-top: 5px;
+// }
+
+// .results {
+//   margin-top: 20px;
+//   width: 100%;
+//   max-width: 800px;
+//   color: #fff;
+
+//   ul {
+//     list-style: none;
+//     padding: 0;
+//   }
+
+//   li {
+//     background-color: #fff;
+//     color: #000;
+//     padding: 15px;
+//     margin-bottom: 10px;
+//     border-radius: 4px;
+//     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//   }
+// }
+
+// .error {
+//   color: #ff0000;
+// }
