@@ -1,0 +1,167 @@
+.bookingContainer {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  }
+  
+  .danhSachChuyen {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+  
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+  
+      th {
+        background-color: #f2f2f2;
+      }
+  
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+    }
+  
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+  
+  .chiTietChuyen {
+    button {
+      background-color: #f44336;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+  
+    h2 {
+      color: #2E7D32;
+      margin-bottom: 10px;
+    }
+  
+    p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+  }
+  
+  .carriageSelector {
+    margin-top: 30px;
+  
+    .tabsToa {
+      display: flex;
+      margin-bottom: 20px;
+  
+      button {
+        margin-right: 10px;
+        padding: 10px 15px;
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &.active {
+          background-color: #0D47A1;
+        }
+      }
+    }
+  }
+  
+  .seatMap {
+    h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+  }
+  
+  .layoutGheMem {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .layoutKhoang6, .layoutKhoang4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .ghe, .giuong {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+  
+    &.trang {
+      background-color: white;
+      color: black;
+    }
+  
+    &.do {
+      background-color: #ff4444;
+      color: white;
+      cursor: not-allowed;
+    }
+  
+    &.vang {
+      background-color: #ffcc00;
+      color: black;
+    }
+  }
+  
+  .danhSachGheDaChon {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  
+    h3 {
+      margin-top: 0;
+      color: #333;
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+  
+      li {
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+      }
+    }
+  
+    button {
+      margin-top: 15px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }

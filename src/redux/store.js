@@ -4,6 +4,8 @@ import ticketReducer from "./ticketSlice";
 import ticketTypeReducer from "./ticketType";
 import stationAutoCompleteReducer from "./stationAutoCompleteSlice"
 import stationSearchReducer from "./stationSearchSlice"
+import carriageReducer from "./carriageSlice";
+import seatReducer from "./seatSlice";
 export const store = configureStore({
     reducer: {
         ticketReservation: ticketReservationReducer,
@@ -11,6 +13,8 @@ export const store = configureStore({
         ticketType: ticketTypeReducer,
         stationAutoComplete: stationAutoCompleteReducer,
         stationSearch: stationSearchReducer,
+        carriage: carriageReducer,
+        seat: seatReducer,
         // Add other reducers here...
     },
 });
