@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import styles from "./Booking.module.scss";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import moment from "moment";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/Input/Input";
 import path from "../../assets/icons/path.svg";
 import cart from "../../assets/icons/cart.svg";
@@ -10,6 +12,21 @@ import Container from "../../components/Container/Container";
 import Train from "../../components/Train/Train";
 
 export default function Booking() {
+  const dispatch = useDispatch();
+  const { reservations, loading, error } = useSelector(
+    (state) => state.ticketReservation
+  );
+  useEffect(() => {
+
+  });
+  const [ticketReservation, setTicketReservation] = useState({
+    seat: "",
+    trip: "",
+    arrivalStationId: "",
+    departureStationId: "",
+    reservationStatus: "OCCUPIED",
+  })
+
   const [activeContainerIndex, setActiveContainerIndex] = useState(null);
 
   function handleContainerClick(index) {
@@ -33,6 +50,7 @@ export default function Booking() {
     },
   ];
 
+
   return (
     <>
       <div className={styles.header}>
@@ -42,7 +60,7 @@ export default function Booking() {
             fontSize={"3rem"}
             id="from"
             defaultValue={"Hà Nội"}
-            // width={"min-content"}
+          // width={"min-content"}
           />
           <img src={path} alt="path" />
           <Input
@@ -50,7 +68,7 @@ export default function Booking() {
             fontSize={"3rem"}
             id="to"
             defaultValue={"Sài Gòn"}
-            // width={"100%"}
+          // width={"100%"}
           />
         </div>{" "}
         <DatePicker value={selectedDate} onChange={handleDateChange} />

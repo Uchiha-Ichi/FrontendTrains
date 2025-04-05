@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.API_BASE_URL;
+
 export const featchTicketType = createAsyncThunk(
     "featchTicketType/fetch",
     async (_, { rejectWithValue }) => {
         try {
 
             const response = await axios.get(
-                `http://localhost:8080/api/tickets/getTicketType`,
+                `${API_BASE_URL}tickets/getTicketType`,
             );
             return response.data;
         } catch (error) {

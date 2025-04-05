@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk, isRejected } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.API_BASE_URL;
+
 export const bookTickets = createAsyncThunk("ticket/bookTickets",
     async (TicketDTO, { rejectWithValue }) => {
         console.log("BookTickets", TicketDTO);
         try {
-            const response = await axios.post("http://localhost:8080/api/tickets/confirmTicket", TicketDTO);
+            const response = await axios.post(`${API_BASE_URL}tickets/confirmTicket`, TicketDTO);
             return response.data;
         }
         catch (error) {
@@ -16,7 +18,7 @@ export const bookTickets = createAsyncThunk("ticket/bookTickets",
 export const testTicket = createAsyncThunk("ticket/testTicket",
     async (testTicket, { rejectWithValue }) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/tickets/testTicket", testTicket);
+            const response = await axios.post(`${API_BASE_URL}tickets/testTicket`, testTicket);
             return response.data;
         }
         catch (error) {

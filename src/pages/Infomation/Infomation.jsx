@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchTicketReservation } from "../../redux/ticketReservationSlice";
 import { featchTicketType } from "../../redux/ticketType";
-import { bookTickets } from "../../redux/ticketSlice";
 
 // import { bookTickets, testTicket } from "../../redux/ticketSlice";
 export default function Infomation() {
@@ -46,6 +45,11 @@ export default function Infomation() {
     }
   }, [reservations]);
 
+  const getPrice = (reservation) => {
+    let price = 0;
+    price = reservation.seat * reservation.seat.car
+    return
+  }
 
   if (loading) return <p>Đang tải...</p>;
   if (error) return <p>Lỗi: {error}</p>;

@@ -2,13 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Action async để lấy thông tin đặt vé từ API
+const API_BASE_URL = import.meta.env.API_BASE_URL;
 export const fetchTicketReservation = createAsyncThunk(
     "ticketReservation/fetch",
     async (id, { rejectWithValue }) => {
         try {
 
             const response = await axios.get(
-                `http://localhost:8080/api/ticketReservation/getReservation`,
+                `${API_BASE_URL}ticketReservation/getReservation`,
                 {
                     params: { id },
                 }
@@ -21,6 +22,19 @@ export const fetchTicketReservation = createAsyncThunk(
         }
     }
 );
+
+export const reserveTicket = createAsyncThunk(
+    "ticketReservation/reserveTicket",
+    async (ticketReservationDTO, { rejectWithValue }) => {
+        try {
+            console.log("ticketReservationDTO", ticketReservationDTO);
+            const response = await axios.post(`${API_BASE_URL}ticketReservation/reserve`, ticketReservationDTO);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || "L��i khi đặt vé");
+        }
+    }
+)
 
 const ticketReservationSlice = createSlice({
     name: "ticketReservation",
@@ -41,6 +55,19 @@ const ticketReservationSlice = createSlice({
                 state.reservations.push(action.payload);
             })
             .addCase(fetchTicketReservation.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(reserveTicket.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(reserveTicket.fulfilled, (state, action) => {
+                state.loading = false;
+                // Thêm vào danh sách đặt vé mới
+                state.reservations.push(action.payload);
+            })
+            .addCase(reserveTicket.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
