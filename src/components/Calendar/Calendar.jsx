@@ -23,34 +23,3 @@ export default function Calendar({ onDateChange }) { // Nhận prop onDateChange
 }
 
 
-// import React, { useState } from "react";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-
-// export default function Calendar({ onDateChange }) {
-//   const [selectedDate, setSelectedDate] = useState(null);
-
-//   const handleDateChange = (date) => {
-//     setSelectedDate(date);
-//     // Chuyển đổi ngày thành định dạng YYYY-MM-DD
-//     const formattedDate = date
-//       ? date.toLocaleDateString("en-CA", {
-//           year: "numeric",
-//           month: "2-digit",
-//           day: "2-digit",
-//         })
-//       : "";
-//     onDateChange(formattedDate); // Gọi prop onDateChange với ngày đã định dạng
-//   };
-
-//   return (
-//     <div>
-//       <DatePicker
-//         selected={selectedDate}
-//         onChange={handleDateChange}
-//         dateFormat="yyyy-MM-dd"
-//         placeholderText="Chọn ngày"
-//       />
-//     </div>
-//   );
-// }
