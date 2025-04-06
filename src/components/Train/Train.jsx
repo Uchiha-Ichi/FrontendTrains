@@ -1,31 +1,68 @@
-import React from "react";
+import { React, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./Train.module.scss";
-
-const Seat = ({ type, isOccupied }) => {
+import { reserveTicket, deleteReserveTicket } from "../../redux/ticketReservationSlice";
+import { selectSeat } from "../../redux/seatSlice";
+const Seat = ({ id, available, isSelected, onClick }) => {
   const seatStyle = {
     width: 40,
     height: 40,
-    backgroundColor: isOccupied ? "#ff6347" : "#4caf50",
+    backgroundColor: available ? (isSelected ? "#4caf50" : "#ff6347") : "#ff6347",
     border: "1px solid #000",
     margin: "5px",
     display: "inline-block",
     textAlign: "center",
     lineHeight: "40px",
+    cursor: available ? "pointer" : "not-allowed",
   };
 
-  return <button style={seatStyle}></button>;
+  return <button onClick={available ? onClick : null} id={id} style={seatStyle}></button>;
 };
 
-const Car = ({ type, carIndex }) => {
+const Car = ({ type, carIndex, numSeats,
+  carsConfig, tripId,
+  arrivalStation,
+  departureStation }) => {
+  const dispatch = useDispatch();
   const seats = [];
-  const seatsInCol = type === "sleepy6" ? 3 : 2;
+  const [selectedSeat, setSelectedSeat] = useState([]);
+  const seatsInCol = type === "Giường nằm khoang 6 điều hòa" ? 3 : 2;
   const seatsClusterLength = type === "seat" ? 32 : type === "sleep4" ? 28 : 42;
-  const seatType =
-    type === "seat" ? "Seat" : type === "sleepy4" ? "Sleepy4" : "Sleepy6";
-  const numSeats = type === "seat" ? 64 : type === "sleepy4" ? 28 : 42;
+
+  const handleSelectSeat = async (seat) => {
+    const isSelected = selectedSeat.some(s => s.seatId === seat.seatId);
+    if (isSelected) {
+      setSelectedSeat(prev => prev.filter(s => s.seatId !== seat.seatId));
+      const ticketReservationDTO = {
+        seat: seat.seatId,
+        trip: tripId,
+        departureStation: departureStation,
+        arrivalStation: arrivalStation
+      }
+      await dispatch(deleteReserveTicket(ticketReservationDTO)).then((result) => {
+        console.log(result);
+      });
+      dispatch(selectSeat({ seatId: seat.seatId, ticketPrice: seat.ticketPrice, reservation: null }));
+    } else {
+      const ticketReservationDTO = {
+        seat: seat.seatId,
+        trip: tripId,
+        departureStation: departureStation,
+        arrivalStation: arrivalStation
+      }
+      const reservationResponse = await dispatch(reserveTicket(ticketReservationDTO));
+      const reservation = reservationResponse.payload;
+      await dispatch(selectSeat({ seatId: seat.seatId, ticketPrice: seat.ticketPrice, reservation: reservation }));
+
+      setSelectedSeat(prev => [...prev, seat]);
+
+    }
+  }
 
   for (let i = 0; i < numSeats; i++) {
-    seats.push(<Seat key={i} type={seatType} isOccupied={false} />);
+    const seat = carsConfig[i];
+    const isSelected = selectedSeat.some(s => s.seatId === seat.seatId);
+    seats.push(<Seat key={carsConfig[i].seatId} available={carsConfig[i].available} isSelected={!isSelected} onClick={() => handleSelectSeat(carsConfig[i])} />);
   }
 
   function renderSeatCluster() {
@@ -72,30 +109,36 @@ const Car = ({ type, carIndex }) => {
   }
 };
 
-const Cabin = ({ cabinIndex, carsConfig }) => {
-  return (
-    <div className={styles.cabin}>
-      <h2>{`Cabin ${cabinIndex + 1}`}</h2>
-      {carsConfig.map((carConfig, carIndex) => (
-        <Car
-          key={carIndex}
-          type={carConfig.type}
-          numSeats={carConfig.numSeats}
-          carIndex={carIndex}
-        />
-      ))}
-    </div>
-  );
-};
+// const Cabin = ({ cabinIndex, carsConfig }) => {
+//   return (
+//     <div className={styles.cabin}>
+//       <h2>{`Cabin ${cabinIndex + 1}`}</h2>
+//       {carsConfig.map((carConfig, carIndex) => (
+//         <Car
+//           key={carIndex}
+//           type={carConfig.type}
+//           numSeats={carConfig.numSeats}
+//           carIndex={carIndex}
+//         />
+//       ))}
+//     </div>
+//   );
+// };
 
-export default function Train({ trainConfig }) {
+export default function Train({ trainConfig, tripId, arrivalStation, departureStation }) {
+
   return (
     <div className={styles.train}>
-      {trainConfig.map((cabinConfig, cabinIndex) => (
-        <Cabin
-          key={cabinIndex}
-          cabinIndex={cabinIndex}
-          carsConfig={cabinConfig.cars}
+      {trainConfig.map((carConfig, carIndex) => (
+        <Car
+          key={carIndex}
+          carIndex={carIndex}
+          type={carConfig.compartmentName}
+          numSeats={carConfig.seatCount}
+          carsConfig={carConfig.seats}
+          tripId={tripId}
+          arrivalStation={arrivalStation}
+          departureStation={departureStation}
         />
       ))}
     </div>

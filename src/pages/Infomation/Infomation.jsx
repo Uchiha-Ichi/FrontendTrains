@@ -6,21 +6,17 @@ import Button from "../../components/Button/Button";
 import Navigation from "../../components/Navigation/Navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchTicketReservation } from "../../redux/ticketReservationSlice";
+// import { fetchTicketReservation } from "../../redux/ticketReservationSlice";
 import { featchTicketType } from "../../redux/ticketType";
 
 // import { bookTickets, testTicket } from "../../redux/ticketSlice";
 export default function Infomation() {
   const dispatch = useDispatch();
-  const { reservations, loading, error } = useSelector(
-    (state) => state.ticketReservation
-  );
-  useEffect(() => {
-    dispatch(fetchTicketReservation(3));
-    dispatch(fetchTicketReservation(6));
-    dispatch(featchTicketType());
-  }, [dispatch]);
-  const ticketType = useSelector((state) => state.ticketType.types);
+  const selectedSeats = useSelector((state) => state.seat.selectedSeats);
+
+  const { types, loading, error } = useSelector((state) => state.ticketType);
+  if (loading) return <p>Đang tải...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
 
   const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
@@ -29,30 +25,30 @@ export default function Infomation() {
     email: "",
   });
   const [tickets, setTickets] = useState([]);
+
+
+  // const getPrice = (reservation) => {
+  //   let price = 0;
+  //   price = reservation.seat * reservation.seat.car
+  //   return
+  // }
   useEffect(() => {
-    if (reservations?.length > 0) {
+    console.log("here");
+    if (selectedSeats?.length > 0) {
       setTickets(
-        reservations.map((reservation) => ({
+        selectedSeats.map((selectedSeat) => ({
           fullName: "",
           cccd: "",
-          price: 1000000,
+          price: selectedSeat.ticketPrice,
           discount: 0,
-          totalPrice: 1000000,
-          ticketReservation: reservation,
-          ticketType: ticketType[1],
+          totalPrice: selectedSeat.ticketPrice,
+          ticketReservation: selectedSeat.reservation,
+          ticketType: types[1],
         }))
       );
     }
-  }, [reservations]);
+  }, []);
 
-  const getPrice = (reservation) => {
-    let price = 0;
-    price = reservation.seat * reservation.seat.car
-    return
-  }
-
-  if (loading) return <p>Đang tải...</p>;
-  if (error) return <p>Lỗi: {error}</p>;
 
   const handlePay = async (event) => {
     event.preventDefault();
@@ -63,8 +59,8 @@ export default function Infomation() {
       };
 
       const totalAmount = getTotalAmount() || 0;;
-      let requestData = { customer: customerInfo.fullName, amount: totalAmount };
-
+      let requestData = { customer: customerInfo.fullName, amount: totalAmount / 1000 };
+      console.log("reqData", requestData);
       const response = await axios.post("http://localhost:5000/payment", requestData,
         { headers: { "Content-Type": "application/json" } });
 
@@ -104,7 +100,7 @@ export default function Infomation() {
       const updatedTickets = [...prevTickets];
       updatedTickets[index] = { ...updatedTickets[index], totalPrice: newPrice };
       updatedTickets[index] = { ...updatedTickets[index], discount: newDiscount };
-      updatedTickets[index] = { ...updatedTickets[index], ticketType: ticketType[idType] };
+      updatedTickets[index] = { ...updatedTickets[index], ticketType: types[idType] };
       return updatedTickets;
     });
   };
@@ -139,8 +135,8 @@ export default function Infomation() {
           <div className={styles.gridHeader}>Giá vé</div>
           <div className={styles.gridHeader}>Giảm giá</div>
           <div className={styles.gridHeader}>Thành tiền</div>
-          {reservations.map((reservation, index) => (
-            console.log(ticketType),
+          {selectedSeats.map((selectedSeat, index) => (
+            console.log(types),
 
             <React.Fragment key={index}>
               <div className={styles.gridCell}>
@@ -153,7 +149,7 @@ export default function Infomation() {
                 <label>Đối tượng:</label>
                 <select name={`category-${index}`} id={`category-${index}`} onChange={(event) => handlePrice(event.target.value, index)}>
 
-                  {ticketType.map((type, idx) => (
+                  {types.map((type, idx) => (
                     <option key={idx} value={type.ticketTypeName}>
                       {type.ticketTypeName}
                     </option>
@@ -167,12 +163,12 @@ export default function Infomation() {
                   }} />
               </div>
               <div className={styles.gridCell}>
-                {reservation.seat.carriageList.compartment.compartmentName}, ghế {reservation.seat.seatName}
+                {selectedSeat.reservation.seat.carriageList.compartment.compartmentName}, ghế {selectedSeat.reservation.seat.seatName}
               </div>
               <div className={styles.gridCell}>
-                {reservation.trip.train.trainName}, {reservation.trip.train.route.routeName}, {reservation.trip.tripDate}
+                {selectedSeat.reservation.trip.train.trainName}, {selectedSeat.reservation.trip.train.route.routeName}, {selectedSeat.reservation.trip.tripDate}
               </div>
-              <div className={styles.gridCell} >1.000.000</div>
+              <div className={styles.gridCell}>{selectedSeat.ticketPrice.toLocaleString()} VND</div>
               <div className={styles.gridCell}>Giảm {(tickets[index]?.discount * 100).toString()} %</div>
               <div className={styles.gridCell}>Giá: {tickets[index]?.totalPrice.toLocaleString()} VND</div>
             </React.Fragment>

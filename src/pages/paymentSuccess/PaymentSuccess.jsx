@@ -6,6 +6,7 @@ import { bookTickets } from "../../redux/ticketSlice";
 const PaymentSuccess = () => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     useEffect(() => {
         const checkPaymentStatus = async () => {
             const payload = JSON.parse(localStorage.getItem("payload")); // Lấy lại payload đã lưu trước đó
@@ -26,6 +27,7 @@ const PaymentSuccess = () => {
         };
 
         checkPaymentStatus();
+        navigate("/");
     }, []);
 
 

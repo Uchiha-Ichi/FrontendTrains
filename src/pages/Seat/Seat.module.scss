@@ -1,0 +1,94 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    min-height: 100vh;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .resultsWrapper {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .carriageSection {
+    margin-top: 20px;
+  }
+  
+  .carriageList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .carriage {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .seatLayout {
+    display: grid;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  
+  .seat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .seatAvailable {
+    background-color: #fff;
+  }
+  
+  .seatSold {
+    background-color: #ff0000;
+    color: #fff;
+    cursor: not-allowed;
+  }
+  
+  .seatSelected {
+    background-color: #ffd700;
+    color: #000;
+  }
+  
+  /* Định dạng ghế cho từng loại toa */
+  .seatLayout {
+    &[data-type="Ngồi mềm điều hòa"] {
+      grid-template-columns: repeat(8, 1fr); /* 32 ghế: 8 cột x 4 hàng */
+      grid-template-rows: repeat(4, 1fr);
+    }
+  
+    &[data-type="Giường nằm khoang 6 điều hòa"] {
+      grid-template-columns: repeat(6, 1fr); /* 30 ghế: 6 cột x 5 hàng */
+      grid-template-rows: repeat(5, 1fr);
+    }
+  
+    &[data-type="Giường nằm khoang 4 điều hòa"] {
+      grid-template-columns: repeat(5, 1fr); /* 20 ghế: 5 cột x 4 hàng */
+      grid-template-rows: repeat(4, 1fr);
+    }
+  }
+  
+  .error {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+  }

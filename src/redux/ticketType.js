@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const featchTicketType = createAsyncThunk(
     "featchTicketType/fetch",
@@ -11,6 +11,7 @@ export const featchTicketType = createAsyncThunk(
             const response = await axios.get(
                 `${API_BASE_URL}tickets/getTicketType`,
             );
+            console.log(response.data)
             return response.data;
         } catch (error) {
             return rejectWithValue(
