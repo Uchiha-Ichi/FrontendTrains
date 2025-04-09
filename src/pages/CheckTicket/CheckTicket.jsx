@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./CheckTicket.module.scss";
 import Button from "../../components/Button/Button";
+import { searchTicketById, searchTicketsByCustomer } from "../../redux/checkTicketSlice";
 
 const CheckTicket = () => {
     const [checkType, setCheckType] = useState("ticketId");
@@ -10,6 +12,9 @@ const CheckTicket = () => {
     const [ticketList, setTicketList] = useState([]);
     const [error, setError] = useState("");
 
+    const dispatch = useDispatch();
+    const { tickets, loading, error: reduxError } = useSelector((state) => state.checkTicket);
+
     useEffect(() => {
         setTicketId("");
         setCccd("");
@@ -18,61 +23,48 @@ const CheckTicket = () => {
         setError("");
     }, [checkType]);
 
-    const handleCheckTicket = async () => {
+    useEffect(() => {
+        if (tickets) {
+            if (Array.isArray(tickets)) setTicketList(tickets);
+            else setTicketList([tickets]);
+        }
+    }, [tickets]);
+
+    useEffect(() => {
+        if (reduxError) {
+            setError(typeof reduxError === "string" ? reduxError : "Có lỗi xảy ra");
+        }
+    }, [reduxError]);
+
+    const handleCheckTicket = () => {
         setError("");
         setTicketList([]);
 
-        let apiUrl = "";
         if (checkType === "ticketId") {
             if (!ticketId) {
                 setError("Vui lòng nhập mã vé!");
                 return;
             }
-            apiUrl = `http://localhost:8088/api/tickets/${ticketId}`;
+            dispatch(searchTicketById(ticketId));
         } else {
             if (!cccd || !phone) {
                 setError("Vui lòng nhập cả CCCD và số điện thoại!");
                 return;
             }
-            apiUrl = `http://localhost:8088/api/tickets/user?cccd=${cccd}&phone=${phone}`;
-        }
-
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error("Không tìm thấy vé!");
-
-            const data = await response.json();
-            console.log("Dữ liệu API trả về:", data);
-
-            if (checkType === "ticketId") {
-                setTicketList(data ? [data] : []);
-            } else {
-                if (Array.isArray(data) && data.length > 0) {
-                    setTicketList(data);
-                } else {
-                    setError("Không tìm thấy vé!");
-                }
-            }
-        } catch (err) {
-            setError(err.message);
+            dispatch(searchTicketsByCustomer({ cccd, phone }));
         }
     };
-
-    const getTicketStatus = (status) => {
-        switch (status) {
-            case "1":
-                return "Đã đặt";
-            case "2":
-                return "Đã thanh toán";
-            case "3":
-                return "Đã sử dụng";
-            case "4":
-                return "Đã hủy";
-            default:
-                return "Không xác định";
-        }
-    };
-
+    const findDepartureTime = (trip, departureStation) => {
+        if (!trip || !trip.train || !trip.train.trainSchedules || !departureStation) return null;
+    
+        const schedule = trip.train.trainSchedules.find(
+            (s) => s.station?.stationId === departureStation.stationId
+        );
+    
+        // Tạm dùng arrivalTime thay cho departureTime nếu bị ghi ngược
+        return schedule?.arrivalTime || null;
+    };    
+    
     return (
         <div className={styles.container}>
             <h2>Kiểm tra vé</h2>
@@ -118,8 +110,9 @@ const CheckTicket = () => {
                         />
                     </>
                 )}
-
-                <Button onClick={handleCheckTicket}>Kiểm tra</Button>
+                <Button onClick={handleCheckTicket} disabled={loading}>
+                    {loading ? "Đang kiểm tra..." : "Kiểm tra"}
+                </Button>
             </div>
 
             {error && <p className={styles.error}>{error}</p>}
@@ -127,30 +120,41 @@ const CheckTicket = () => {
             {ticketList.length > 0 && (
                 <div className={styles.ticketInfo}>
                     <h3>Danh sách vé</h3>
-                    {ticketList.map((ticket, index) => (
-                        <div key={index} className={styles.ticketItem}>
-                            {checkType === "userInfo" && <h4>Vé {index + 1}</h4>}
-                            <p><strong>Mã vé:</strong> {ticket.ticketId}</p>
-                            <p><strong>Hành khách:</strong> {ticket.passenger?.fullname || "Không có dữ liệu"}</p>
-                            <p><strong>Tên tàu:</strong> {ticket.trip?.train?.trainName || "Không có dữ liệu"}</p>
-                            <p><strong>Giờ khởi hành:</strong>
-                                {ticket.trip?.tripDate
-                                    ? `${new Date(ticket.trip.tripDate).toLocaleDateString("vi-VN")} - ${ticket.trip?.train?.departureTime || "Chưa có giờ"}`
-                                    : "Không có dữ liệu"}
-                            </p>
-                            <p>
-                                <strong>Vị trí ghế:</strong> {ticket.seat?.seatNumber || "?"}
-                                {" - Tầng " + (ticket.seat?.level || "?")}
-                                {" - Toa " + (ticket.seat?.carriageList?.carriageListId || "?")}
-                                {" - Khoang " + (ticket.seat?.carriageList?.compartment?.compartmentName || "?")}
-                            </p>
-                            <p><strong>Giá:</strong> {ticket.totalPrice ? `${ticket.totalPrice} VND` : "Chưa có giá"}</p>
-                            <p><strong>Ga đi:</strong> {ticket.departureStation?.stationName || "Không có dữ liệu"}</p>
-                            <p><strong>Ga đến:</strong> {ticket.arrivalStation?.stationName || "Không có dữ liệu"}</p>
-                            <p><strong>Trạng thái vé:</strong> {getTicketStatus(ticket.ticketStatus)}</p>
-                            <hr />
-                        </div>
-                    ))}
+                    {ticketList.map((ticket, index) => {
+                        const res = ticket.reservation;
+                        const trip = res?.trip;
+                        const seat = res?.seat;
+                        const carriage = seat?.carriageList;
+                        const compartment = carriage?.compartment;
+
+                        return (
+                            <div key={index} className={styles.ticketItem}>
+                                {checkType === "userInfo" && <h4>Vé {index + 1}</h4>}
+                                <p><strong>Mã vé:</strong> {ticket.ticketId}</p>
+                                <p><strong>Hành khách:</strong> {ticket.passenger?.fullname || "Không có dữ liệu"}</p>
+                                <p><strong>Tên tàu:</strong> {trip?.train?.trainName || "Không có dữ liệu"}</p>
+                                <p><strong>Giờ khởi hành:</strong>
+  {trip?.tripDate
+    ? `${new Date(trip.tripDate).toLocaleDateString("vi-VN")} - ${
+        findDepartureTime(trip, res?.departureStation) || "Chưa có giờ"
+      }`
+    : "Không có dữ liệu"}
+</p>
+
+                                <p>
+                                    <strong>Vị trí ghế:</strong> {seat?.seatNumber || "?"}
+                                    {" - Tầng " + (seat?.floor || "?")}
+                                    {" - Toa " + (carriage?.carriageListId || "?")}
+                                    {" - Khoang " + (compartment?.compartmentName || "?")}
+                                </p>
+                                <p><strong>Giá:</strong> {ticket.totalPrice ? `${ticket.totalPrice} VND` : "Chưa có giá"}</p>
+                                <p><strong>Ga đi:</strong> {res?.departureStation?.stationName || "Không có dữ liệu"}</p>
+                                <p><strong>Ga đến:</strong> {res?.arrivalStation?.stationName || "Không có dữ liệu"}</p>
+                                <p><strong>Trạng thái vé:</strong> {ticket.ticketStatus || "Không có dữ liệu"}</p>
+                                <hr />
+                            </div>
+                        );
+                    })}
                 </div>
             )}
         </div>
